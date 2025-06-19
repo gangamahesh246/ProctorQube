@@ -22,8 +22,8 @@ const handleFileUpload = (req, res, next) => {
   });
 };
 
-router.post("/profile", protect, adminOnly, handleFileUpload, upsertProfile);
-router.get("/getprofile", protect, adminOnly, getProfile);
-router.get("/matchprofile", protect, adminOnly, matchProfile);
+router.post("/profile", handleFileUpload, upsertProfile);
+router.get("/getprofile", getProfile);
+router.get("/matchprofile", matchProfile);
 
 module.exports = router;

@@ -30,6 +30,7 @@ const RegisterController = async (req, res, next) => {
       message: "Registered successfully",
       token: generateToken(std),
       user: {
+        student_id: std.student_id,
         username: std.username,
         isAdmin: std.isAdmin,
       },
@@ -67,7 +68,7 @@ const LoginController = async (req, res, next) => {
 
 const ForgotPasswordController = async (req, res, next) => {
   try {
-    const { id, password } = req.body;
+    const { id, new_password } = req.body;
 
     const std = await Login.findOne({
       $or: [{ student_id: id }, { employeeId: id}],
@@ -75,7 +76,7 @@ const ForgotPasswordController = async (req, res, next) => {
 
     if (!std) return res.status(401).json({ message: "Invalid ID" });
 
-    std.password = password;
+    std.password = new_password;
     await std.save();
 
     res.status(200).json({
