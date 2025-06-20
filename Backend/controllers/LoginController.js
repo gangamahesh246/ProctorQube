@@ -44,21 +44,22 @@ const LoginController = async (req, res, next) => {
   try {
     const { id, password } = req.body;
 
-    const admin = await Login.findOne({
+    const user = await Login.findOne({
       $or: [{ student_id: id }, { employeeId: id }, { username: id }],
     });
-    if (!admin || !(await admin.matchPassword(password))) {
+    if (!user || !(await user.matchPassword(password))) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
     res.status(200).json({
       message: "Logged in successfully",
-      token: generateToken(admin),
+      token: generateToken(user),
       user: {
-        _id: admin._id,
-        username: admin.username,
-        isAdmin: admin.isAdmin,
-        employeeId: admin.employeeId
+        _id: user._id,
+        username: user.username,
+        isAdmin: user.isAdmin,
+        employeeId: user.employeeId,
+        student_id: user.student_id
   }
     });
   } catch (err) {
